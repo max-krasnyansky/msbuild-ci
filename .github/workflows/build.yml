@@ -1,0 +1,39 @@
+name: Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ master ]
+    tags:
+      - v[0-9].**
+  pull_request:
+    branches: [ master ]
+
+permissions:
+  contents: write
+
+jobs:
+  min-build:
+    strategy:
+      matrix:
+        target: [ arm64-windows-llvm ]
+        include:
+        - target: arm64-windows-llvm
+          os: windows-2022
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules:  recursive
+          fetch-depth: 100
+          fetch-tags:  true
+
+      - uses: microsoft/setup-msbuild@v2
+        with:
+          msbuild-architecture: x64
+
+      - name: Build ${{ matrix.target }}
+        run: |
+          cmake --preset arm64-windows-llvm-release
+          cmake --build  build-arm64-windows-llvm-release
