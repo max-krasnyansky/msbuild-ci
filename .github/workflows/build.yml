@@ -31,7 +31,11 @@ jobs:
 
       - uses: microsoft/setup-msbuild@v2
         with:
-          msbuild-architecture: x64
+          msbuild-architecture: arm64
+
+      - name: Install ninja
+        run: |
+          choco install ninja
 
       - name: Build ${{ matrix.target }}
         run: |
