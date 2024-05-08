@@ -1,6 +1,6 @@
 #include <iostream>
-
-namespace fs = std::filesystem;
+#include <filesystem>
+#include <span>
 
 bool test()
 {
